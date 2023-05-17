@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+    <title>Groups</title>
+</head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+
+<form th:method="POST" th:action="@{/groups/new}" >
+    <div class="form-group">
+        <label for="id">Enter id: </label>
+        <input type="text" class="form-control" id="id" name="id">
+    </div>
+    <div class="form-group">
+        <label for="groupNumber">Enter group number: </label>
+        <input type="text" class="form-control" id="groupNumber" name="number">
+    </div>
+    <br>
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
+
+<table class="table table-hover table-dark table-hover table-bordered table-striped caption-top ">
+    <caption class="text-center h1">Groups</caption>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>NUMBER</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="group : ${groups}">
+        <td th:text="${group.id}"/>
+        <td th:text="${group.number}"/>
+        <td>
+            <form th:method="DELETE" th:action="@{/groups/delete/{id}(id=${group.id})}">
+                <input type="submit" class="btn btn-danger" value="Delete"/>
+            </form>
+        </td>
+        <td>
+            <form th:method="GET" th:action="@{/groups/update/{id}(id=${group.id})}" th:object="${group}">
+                <input type="submit" class="btn btn-warning" value="Update"/>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div th:if = "${totalPages > 1}">
+    <ul class = "pagination">
+        <li th:each="i: ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage ? 'active' : ''}" class = "page-item" >
+            <a class="page-link" th:if="${currentPage != i}" th:href="@{'/groups/page/' + ${i}}">[[${i}]]</a>
+            <a th:unless="${currentPage != i}" class="page-link">[[${i}]]</a>
+        </li>
+        <li class = "page-item" th:classappend="${currentPage >= totalPages ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{'/groups/page/' + ${currentPage + 1}}">Next</a>
+        </li>
+
+        <li class="page-item" th:classappend="${currentPage >= totalPages ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{'/groups/page/' + ${totalPages}}">Last</a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

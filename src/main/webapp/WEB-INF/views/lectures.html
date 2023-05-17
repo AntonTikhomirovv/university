@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+    <title>Lectures</title>
+</head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+
+<form th:method="POST" th:action="@{/lectures/new}" >
+    <div class="form-group">
+        <label for="id">Enter id: </label>
+        <input type="text" class="form-control" id="id" name="id">
+    </div>
+    <div class="form-group">
+        <label for="audience">Enter audience id: </label>
+        <input type="text" class="form-control" id="audience" name="audience">
+    </div>
+    <div class="form-group">
+        <label for="teacher">Enter teacher id: </label>
+        <input type="text" class="form-control" id="teacher" name="teacher">
+    </div>
+    <div class="form-group">
+        <label for="pairTime">Enter pair time number: </label>
+        <input type="text" class="form-control" id="pairTime" name="pairTime">
+    </div>
+    <br>
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
+
+<table class="table table-hover table-dark table-hover table-bordered table-striped caption-top ">
+    <caption class="text-center h1">Lectures</caption>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>AUDIENCE ID</th>
+        <th>TEACHER ID</th>
+        <th>PAIR NUMBER</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="lecture : ${lectures}">
+        <td th:text="${lecture.id}"/>
+        <td th:text="${lecture.audience}"/>
+        <td th:text="${lecture.teacher}"/>
+        <td th:text="${lecture.pairTime}"/>
+        <td>
+            <form th:method="DELETE" th:action="@{/lectures/delete/{id}(id=${lecture.id})}">
+                <input type="submit" class="btn btn-danger" value="Delete"/>
+            </form>
+        </td>
+        <td>
+            <form th:method="GET" th:action="@{/lectures/update/{id}(id=${lecture.id})}" th:object="${lecture}">
+                <input type="submit" class="btn btn-warning" value="Update"/>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div th:if = "${totalPages > 1}">
+    <ul class = "pagination">
+        <li th:each="i: ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage ? 'active' : ''}" class = "page-item" >
+            <a class="page-link" th:if="${currentPage != i}" th:href="@{'/lectures/page/' + ${i}}">[[${i}]]</a>
+            <a th:unless="${currentPage != i}" class="page-link">[[${i}]]</a>
+        </li>
+        <li class = "page-item" th:classappend="${currentPage >= totalPages ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{'/lectures/page/' + ${currentPage + 1}}">Next</a>
+        </li>
+
+        <li class="page-item" th:classappend="${currentPage >= totalPages ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{'/lectures/page/' + ${totalPages}}">Last</a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+    <title>Pair times</title>
+</head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+
+<form th:method="POST" th:action="@{/pair_times/new}" >
+    <div class="form-group">
+        <label for="pairNumber">Enter pairNumber: </label>
+        <input type="text" class="form-control" id="pairNumber" name="pairNumber">
+    </div>
+    <div class="form-group">
+        <label for="startTime">Enter start time: </label>
+        <input type="text" class="form-control" id="startTime" name="startTime">
+    </div>
+    <div class="form-group">
+        <label for="endTime">Enter end time: </label>
+        <input type="text" class="form-control" id="endTime" name="endTime">
+    </div>
+    <br>
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
+<table class="table table-hover table-dark table-hover table-bordered table-striped caption-top ">
+    <caption class="text-center h1">Pair times</caption>
+    <thead>
+    <tr>
+        <th>PAIR NUMBER</th>
+        <th>START TIME</th>
+        <th>END TIME</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="pair_time : ${pair_times}">
+        <td th:text="${pair_time.pairNumber}"/>
+        <td th:text="${pair_time.startTime}"/>
+        <td th:text="${pair_time.endTime}"/>
+        <td>
+            <form th:method="DELETE" th:action="@{/pair_times/delete/{pairNumber}(pairNumber=${pair_time.pairNumber})}">
+                <input type="submit" class="btn btn-danger" value="Delete"/>
+            </form>
+        </td>
+        <td>
+            <form th:method="GET" th:action="@{/pair_times/update/{pairNumber}(pairNumber=${pair_time.pairNumber})}" th:object="${pair_time}">
+                <input type="submit" class="btn btn-warning" value="Update"/>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div th:if = "${totalPages > 1}">
+    <ul class = "pagination">
+        <li th:each="i: ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage ? 'active' : ''}" class = "page-item" >
+            <a class="page-link" th:if="${currentPage != i}" th:href="@{'/pair_times/page/' + ${i}}">[[${i}]]</a>
+            <a th:unless="${currentPage != i}" class="page-link">[[${i}]]</a>
+        </li>
+        <li class = "page-item" th:classappend="${currentPage >= totalPages ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{'/pair_times/page/' + ${currentPage + 1}}">Next</a>
+        </li>
+
+        <li class="page-item" th:classappend="${currentPage >= totalPages ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{'/pair_times/page/' + ${totalPages}}">Last</a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

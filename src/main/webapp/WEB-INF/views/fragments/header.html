@@ -1,0 +1,32 @@
+<div th:fragment="header" xmlns:th="http://www.w3.org/1999/xhtml">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">University</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a th:classappend="${#httpServletRequest.getRequestURI().contains('/audiences')} ? 'active' : ''" class="nav-link" href="/audiences">Audiences</a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:classappend="${#httpServletRequest.getRequestURI().contains('/groups')} ? 'active' : ''" class="nav-link" href="/groups">Groups</a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:classappend="${#httpServletRequest.getRequestURI().contains('/lectures')} ? 'active' : ''" class="nav-link" href="/lectures">Lectures</a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:classappend="${#httpServletRequest.getRequestURI().contains('/pair_times')} ? 'active' : ''" class="nav-link" href="/pair_times">Pair times</a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:classappend="${#httpServletRequest.getRequestURI().contains('/students')} ? 'active' : ''" class="nav-link" href="/students">Students</a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:classappend="${#httpServletRequest.getRequestURI().contains('/subjects')} ? 'active' : ''" class="nav-link" href="/subjects">Subjects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:classappend="${#httpServletRequest.getRequestURI().contains('/teachers')} ? 'active' : ''" class="nav-link" href="/teachers">Teachers</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
